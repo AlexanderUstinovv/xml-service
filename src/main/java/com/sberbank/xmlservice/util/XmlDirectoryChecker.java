@@ -3,18 +3,22 @@ package com.sberbank.xmlservice.util;
 import org.springframework.stereotype.Component;
 
 import java.io.File;
-import java.net.URI;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 @Component
 public class XmlDirectoryChecker implements DirectoryChecker {
 
     @Override
-    public String[] getFiles(URI directoryPath) {
+    public String[] getFiles(String directoryPath) {
         var directory = new File(directoryPath);
-        String[] directoryList = null;
+        var pathList = new ArrayList<String>();
         if(directory.isDirectory()) {
-            directoryList = directory.list();
+            var filesList = directory.listFiles();
+            if (filesList != null && filesList.length > 0) {
+                Arrays.stream(filesList).forEach(item -> pathList.add(item.getAbsolutePath()));
+            }
         }
-        return directoryList;
+        return pathList.toArray(new String[0]);
     }
 }
