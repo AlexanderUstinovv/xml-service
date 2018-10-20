@@ -2,9 +2,9 @@ package com.sberbank.xmlservice.domain;
 
 import java.util.Date;
 
-public class XmlFile {
+public class FileHistory {
 
-    public XmlFile() {
+    public FileHistory() {
     }
 
     public long getId() {
@@ -15,12 +15,12 @@ public class XmlFile {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public long getFileId() {
+        return fileId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFileId(long fileId) {
+        this.fileId = fileId;
     }
 
     public String getMessageLog() {
@@ -40,7 +40,7 @@ public class XmlFile {
     }
 
     private long id;
-    private String name;
+    private long fileId;
     private String messageLog;
     private Date date;
 }

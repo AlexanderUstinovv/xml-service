@@ -1,8 +1,8 @@
 package com.sberbank.xmlservice.domain;
 
-public class InputDirectory {
+public class Directory {
 
-    public InputDirectory() {
+    public Directory() {
     }
 
     public long getId() {
@@ -21,6 +21,15 @@ public class InputDirectory {
         this.path = path;
     }
 
+    public boolean isInput() {
+        return isInput;
+    }
+
+    public void setInput(boolean input) {
+        isInput = input;
+    }
+
     private long id;
     private String path;
+    private boolean isInput;
 }

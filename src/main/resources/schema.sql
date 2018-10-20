@@ -1,23 +1,41 @@
-CREATE TABLE input_directory (
+CREATE TABLE directory (
   id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  path VARCHAR(255) NOT NULL
+  path VARCHAR(255) NOT NULL,
+  is_input BOOLEAN DEFAULT FALSE
 );
 
-CREATE TABLE input_directory_history (
+CREATE TABLE directory_history (
   id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  directory_name VARCHAR(255),
-  message_log VARCHAR(255),
-  date TIMESTAMP
+  id_directory BIGINT NOT NULL,
+  message_log VARCHAR(255) NOT NULL,
+  date TIMESTAMP NOT NULL,
+  FOREIGN KEY (id_directory) REFERENCES directory(id)
 );
 
-CREATE TABLE xml_file (
+CREATE TABLE file (
   id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-  name VARCHAR(255),
-  message_log VARCHAR(255),
-  date TIMESTAMP
+  name VARCHAR(255) NOT NULL,
+  md5_sum VARCHAR(255) NOT NULL,
+  content BLOB,
+  date TIMESTAMP NOT NULL
 );
 
-INSERT INTO input_directory(path) VALUES('/home/ro');
+CREATE TABLE file_directory_link (
+  id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  id_file BIGINT NOT NULL,
+  id_directory BIGINT NOT NULL,
+  FOREIGN KEY (id_file) REFERENCES file(id),
+  FOREIGN KEY (id_directory) REFERENCES directory(id)
+);
+
+CREATE TABLE file_history (
+  id BIGINT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  id_file BIGINT NOT NULL,
+  message_log VARCHAR(255) NOT NULL,
+  date TIMESTAMP NOT NULL,
+  FOREIGN KEY (id_file) REFERENCES file(id)
+);
+
+INSERT INTO directory(path, is_input) VALUES('/home/ro', TRUE);
 
 COMMIT;
-

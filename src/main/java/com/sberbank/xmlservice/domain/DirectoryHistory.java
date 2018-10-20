@@ -2,9 +2,9 @@ package com.sberbank.xmlservice.domain;
 
 import java.util.Date;
 
-public class InputDirectoryHistory {
+public class DirectoryHistory {
 
-    public InputDirectoryHistory() {
+    public DirectoryHistory() {
     }
 
     public long getId() {
@@ -13,14 +13,6 @@ public class InputDirectoryHistory {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    public String getDirectoryName() {
-        return directoryName;
-    }
-
-    public void setDirectoryName(String directoryName) {
-        this.directoryName = directoryName;
     }
 
     public String getMessageLog() {
@@ -40,7 +32,7 @@ public class InputDirectoryHistory {
     }
 
     private long id;
-    private String directoryName;
     private String messageLog;
     private Date date;
+
 }
