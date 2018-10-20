@@ -33,7 +33,11 @@ public interface FileMapper {
 
     @Select("SELECT f.id, f.name, f.md5_sum, f.content, f.date FROM file_directory_link fdl JOIN file f ON fdl.id_file = f.id WHERE fdl.id_directory=#{directoryId}")
     @ResultMap("fileResult")
-    List<File> getFilesByDirectoryId(long directoryId);
+    List<File> findFilesByDirectoryId(long directoryId);
+
+    @Select({"<script>SELECT * FROM file WHERE name IN <foreach item='emp' collection='fileNamesList' open='(' separator=', ' close=')'>#{emp}</foreach></script>"})
+    @ResultMap("fileResult")
+    List<File> findFilesByNamesList(@Param("fileNamesList") String[] fileNamesList);
 
     @Insert("INSERT INTO file(name, md5_sum, content, date) VALUES(#{name}, #{md5Sum}, #{content}, #{date})")
     void save(File file);
