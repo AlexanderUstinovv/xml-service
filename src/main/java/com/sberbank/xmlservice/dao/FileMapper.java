@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 @Repository
@@ -23,9 +24,9 @@ public interface FileMapper {
     )
     File findById(long id);
 
-    @Select("SELECT * FROM file WHERE name=#{name}")
+    @Select("SELECT * FROM file f JOIN file_directory_link fdl ON fdl.id_file = f.id WHERE f.name=#{name} AND fdl.id_directory=#{directoryId}")
     @ResultMap("fileResult")
-    File findByName(String name);
+    File findByNameAndDirectoryId(String name, long directoryId);
 
     @Select("SELECT * FROM file WHERE md5_sum=#{md5Sum}")
     @ResultMap("fileResult")
@@ -35,11 +36,16 @@ public interface FileMapper {
     @ResultMap("fileResult")
     List<File> findFilesByDirectoryId(long directoryId);
 
+    @Select("SELECT f.name, f.md5_sum FROM file_directory_link fdl JOIN file f ON fdl.id_file = f.id WHERE fdl.id_directory=#{directoryId}")
+    @MapKey("name")
+    Map<String, byte[]> findMapFilesByDirectoryId(long directoryId);
+
     @Select({"<script>SELECT * FROM file WHERE name IN <foreach item='emp' collection='fileNamesList' open='(' separator=', ' close=')'>#{emp}</foreach></script>"})
-    @ResultMap("fileResult")
-    List<File> findFilesByNamesList(@Param("fileNamesList") String[] fileNamesList);
+    @MapKey("name")
+    Map<String, byte[]> findFilesByNamesList(@Param("fileNamesList") String[] fileNamesList);
 
     @Insert("INSERT INTO file(name, md5_sum, content, date) VALUES(#{name}, #{md5Sum}, #{content}, #{date})")
+    @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=int.class)
     void save(File file);
 
     @Update("UPDATE file SET name=#{name}, md5_sum=#{md5Sum}, content=#{content}, date=#{date} WHERE id=#{id}")

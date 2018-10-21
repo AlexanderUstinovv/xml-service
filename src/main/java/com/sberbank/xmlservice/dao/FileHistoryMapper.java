@@ -21,6 +21,7 @@ public interface FileHistoryMapper {
     List<FileHistory> getHistoryByFileId(long fileId);
 
     @Insert("INSERT INTO file_history(id_file, message_log, date) VALUES(#{fileId}, #{messageLog}, #{date})")
+    @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=int.class)
     void save(FileHistory fileHistory);
 }
 

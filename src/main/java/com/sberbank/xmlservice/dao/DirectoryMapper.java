@@ -26,8 +26,13 @@ public interface DirectoryMapper {
 
     @Select("SELECT d.id, d.path, d.is_input FROM file_directory_link fdl JOIN directory d on fdl.id_directory = d.id WHERE fdl.id_file = #{fileId}")
     @ResultMap("directoryResult")
-    List<Directory> getDirectoriesByFileId(long fileId);
+    List<Directory> findDirectoriesByFileId(long fileId);
 
+    @Select("SELECT * FROM directory WHERE path = #{path}")
+    @ResultMap("directoryResult")
+    Directory findDirectoryByPath(String path);
+    
     @Insert("INSERT INTO directory(path, is_input) VALUES(#{path}, #{isInput})")
+    @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=int.class)
     void save(Directory directory);
 }
