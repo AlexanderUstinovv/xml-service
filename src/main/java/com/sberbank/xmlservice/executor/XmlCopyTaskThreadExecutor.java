@@ -1,5 +1,6 @@
 package com.sberbank.xmlservice.executor;
 
+import com.sberbank.xmlservice.util.FileChecksumCounter;
 import com.sberbank.xmlservice.util.XmlFileHandler;
 
 import java.util.ArrayList;
@@ -10,12 +11,13 @@ import java.util.concurrent.*;
 public class XmlCopyTaskThreadExecutor implements CopyTaskThreadExecutor {
 
     @Override
-    public List<Map<String, String>> copyFiles(String[] fileList, String destination) {
+    public List<Map<String, String>> copyFiles(Map<String, byte[]> filesToCopy, String destination) {
         var taskList = new ArrayList<Callable<Map<String, String>>>();
         var fileHandler = new XmlFileHandler();
+        var checkSumCounter = new FileChecksumCounter();
 
-        for (var item : fileList) {
-            taskList.add(new CopyTask(item, destination, fileHandler));
+        for (var item : filesToCopy.entrySet()) {
+            taskList.add(new CopyTask(item.getKey(), item.getValue(), destination, fileHandler, checkSumCounter));
         }
 
         var executorService = Executors.newFixedThreadPool(numberOfThreads);

@@ -1,5 +1,6 @@
 spring:
   h2:
+    port: 8081
     console:
       enabled: true
   datasource:
@@ -8,4 +9,8 @@ spring:
     username: user
     password: 123
     driver-class-name: org.h2.Driver
+    schema: classpath:schema.sql
 
+directories:
+  start-input: "/Users/alexander_ustinov/input"
+  output: "/Users/alexander_ustinov/output"

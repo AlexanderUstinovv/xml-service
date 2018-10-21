@@ -4,5 +4,5 @@ import java.util.List;
 import java.util.Map;
 
 public interface CopyTaskThreadExecutor {
-    List<Map<String, String>> copyFiles(String[] fileList, String destination);
+    List<Map<String, String>> copyFiles(Map<String, byte[]> filesToCopy, String destination);
 }
