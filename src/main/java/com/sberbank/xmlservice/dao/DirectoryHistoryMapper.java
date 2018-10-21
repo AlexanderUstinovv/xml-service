@@ -18,7 +18,7 @@ public interface DirectoryHistoryMapper {
     )
     DirectoryHistory findHistoryByDirectoryId(long id);
 
-    @Insert("INSERT INTO directory_history(message_log, date) VALUES(#{messageLog}, #{date})")
+    @Insert("INSERT INTO directory_history(id_directory, message_log, date) VALUES(#{directoryId}, #{messageLog}, #{date})")
     @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=int.class)
     void save(DirectoryHistory directoryHistory);
 }

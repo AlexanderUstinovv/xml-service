@@ -36,6 +36,4 @@ CREATE TABLE file_history (
   FOREIGN KEY (id_file) REFERENCES file(id)
 );
 
-INSERT INTO directory(path, is_input) VALUES('/home/ro', TRUE);
-
 COMMIT;
