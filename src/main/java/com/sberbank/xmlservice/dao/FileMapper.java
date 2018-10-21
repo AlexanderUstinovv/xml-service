@@ -4,7 +4,6 @@ import com.sberbank.xmlservice.domain.File;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -49,5 +48,5 @@ public interface FileMapper {
     void save(File file);
 
     @Update("UPDATE file SET name=#{name}, md5_sum=#{md5Sum}, content=#{content}, date=#{date} WHERE id=#{id}")
-    void update(long id, String name, String md5Sum, byte[] content, Date date);
+    void update(File file);
 }
