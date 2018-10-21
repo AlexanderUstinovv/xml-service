@@ -31,8 +31,16 @@ public interface DirectoryMapper {
     @Select("SELECT * FROM directory WHERE path = #{path}")
     @ResultMap("directoryResult")
     Directory findDirectoryByPath(String path);
-    
-    @Insert("INSERT INTO directory(path, is_input) VALUES(#{path}, #{isInput})")
+
+    @Select("SELECT * FROM directory WHERE is_output=TRUE")
+    @ResultMap("directoryResult")
+    Directory findOutputDirectory();
+
+    @Select("SELECT * FROM directory WHERE is_archive=TRUE")
+    @ResultMap("directoryResult")
+    Directory findArchiveDirectory();
+
+    @Insert("INSERT INTO directory(path, is_input, is_output, is_archive) VALUES(#{path}, #{isInput}, #{isOutput}, #{isArchive})")
     @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=int.class)
     void save(Directory directory);
 }

@@ -1,5 +1,6 @@
 package com.sberbank.xmlservice.executor;
 
+import com.sberbank.xmlservice.domain.File;
 import com.sberbank.xmlservice.util.CheckSumCounter;
 import com.sberbank.xmlservice.util.FileHandler;
 
@@ -8,14 +9,15 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 
-public class CopyTask implements Callable<Map<String, String>> {
+public class HandleFileTask implements Callable<Map<String, String>> {
 
-    CopyTask(String sourcePath, byte[] checksum, String destinationPath, FileHandler fileHandler, CheckSumCounter checkSumCounter) {
-        this.destinationPath = destinationPath;
-        this.checksum = checksum;
-        this.fileHandler = fileHandler;
+    HandleFileTask(String sourcePath, ConcurrentHashMap<byte[], File> fileMap, String destinationPath, FileHandler fileHandler, CheckSumCounter checkSumCounter) {
         this.sourcePath = sourcePath;
+        this.fileMap = fileMap;
+        this.destinationPath = destinationPath;
+        this.fileHandler = fileHandler;
         this.checkSumCounter = checkSumCounter;
     }
 
@@ -25,14 +27,14 @@ public class CopyTask implements Callable<Map<String, String>> {
         byte[] currentChecksum = new byte[]{0};
         try {
             currentChecksum = checkSumCounter.getChecksum(sourcePath, "MD5");
-            if (!Arrays.equals(checksum, currentChecksum)) {
-                isCopied = fileHandler.copyFile(sourcePath, destinationPath);
+            if (!fileMap.containsKey(currentChecksum)) {
+                isCopied = fileHandler.handleFile(sourcePath, destinationPath);
             }
         } catch (IOException | NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
 
-        return Map.of("file", fileHandler.resolveCopiedFileName(
+        return Map.of("file", fileHandler.resolveHandledFileName(
                 sourcePath, destinationPath), "result", String.valueOf(isCopied),
                 "checksum", Arrays.toString(currentChecksum));
     }
@@ -41,5 +43,5 @@ public class CopyTask implements Callable<Map<String, String>> {
     private String destinationPath;
     private FileHandler fileHandler;
     private CheckSumCounter checkSumCounter;
-    private byte[] checksum;
+    private ConcurrentHashMap<byte[], File> fileMap;
 }

@@ -12,11 +12,12 @@ import java.util.Date;
 @Service
 public class XmlDirectoryService implements DirectoryService {
 
+    //TODO: breaks DRY principe
     @Override
     public Directory getInputDirectory() {
         var inputDirectory = directoryMapper.findInputDirectory();
         if (inputDirectory == null || inputDirectory.getPath().isEmpty()) {
-            inputDirectory = new Directory() {{setPath(startInputDirectoryPath);setInput(true);}};
+            inputDirectory = new Directory() {{setPath(startInputDirectoryPath);setInput(true);setOutput(false);setArchive(false);}};
             directoryMapper.save(inputDirectory);
         }
         return inputDirectory;
@@ -24,12 +25,22 @@ public class XmlDirectoryService implements DirectoryService {
 
     @Override
     public Directory getOutputDirectory() {
-        var outputDirectory = directoryMapper.findDirectoryByPath(outputDirectoryPath);
+        var outputDirectory = directoryMapper.findOutputDirectory();
         if (outputDirectory == null || outputDirectory.getPath().isEmpty()) {
-            outputDirectory = new Directory() {{setPath(outputDirectoryPath);setInput(false);}};
+            outputDirectory = new Directory() {{setPath(outputDirectoryPath);setInput(false);setOutput(true);setArchive(false);}};
             directoryMapper.save(outputDirectory);
         }
         return outputDirectory;
+    }
+
+    @Override
+    public Directory getArchiveDirectory() {
+        var archiveDirectory = directoryMapper.findOutputDirectory();
+        if (archiveDirectory == null || archiveDirectory.getPath().isEmpty()) {
+            archiveDirectory = new Directory() {{setPath(archiveDirectoryPath);setInput(false);setOutput(false);setArchive(true);}};
+            directoryMapper.save(archiveDirectory);
+        }
+        return archiveDirectory;
     }
 
     @Override
@@ -45,6 +56,8 @@ public class XmlDirectoryService implements DirectoryService {
     private String startInputDirectoryPath;
     @Value("${directories.output}")
     private String outputDirectoryPath;
+    @Value("$directories.archive")
+    private String archiveDirectoryPath;
 
     @Autowired
     private DirectoryMapper directoryMapper;

@@ -14,3 +14,4 @@ spring:
 directories:
   start-input: "/Users/alexander_ustinov/input"
   output: "/Users/alexander_ustinov/output"
+  archive: "/Users/alexander_ustinov/archive"

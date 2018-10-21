@@ -1,23 +1,24 @@
 package com.sberbank.xmlservice.executor;
 
+import com.sberbank.xmlservice.domain.File;
 import com.sberbank.xmlservice.util.FileChecksumCounter;
-import com.sberbank.xmlservice.util.XmlFileHandler;
+import com.sberbank.xmlservice.util.FileHandler;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.*;
 
-public class XmlCopyTaskThreadExecutor implements CopyTaskThreadExecutor {
+public class XmlHandleFileTaskThreadExecutor implements HandleFileTaskThreadExecutor {
 
     @Override
-    public List<Map<String, String>> copyFiles(Map<String, byte[]> filesToCopy, String destination) {
+    public List<Map<String, String>> copyFiles(String[] filesToCopy, ConcurrentHashMap<byte[], File> filesMap,
+                                               String destination, FileHandler fileHandler) {
         var taskList = new ArrayList<Callable<Map<String, String>>>();
-        var fileHandler = new XmlFileHandler();
         var checkSumCounter = new FileChecksumCounter();
 
-        for (var item : filesToCopy.entrySet()) {
-            taskList.add(new CopyTask(item.getKey(), item.getValue(), destination, fileHandler, checkSumCounter));
+        for (var item : filesToCopy) {
+            taskList.add(new HandleFileTask(item, filesMap, destination, fileHandler, checkSumCounter));
         }
 
         var executorService = Executors.newFixedThreadPool(numberOfThreads);

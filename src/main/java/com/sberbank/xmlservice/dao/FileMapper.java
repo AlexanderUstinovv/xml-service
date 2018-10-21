@@ -35,10 +35,10 @@ public interface FileMapper {
     @ResultMap("fileResult")
     List<File> findFilesByDirectoryId(long directoryId);
 
-    @Select("SELECT f.name, f.md5_sum FROM file_directory_link fdl JOIN file f ON fdl.id_file = f.id WHERE fdl.id_directory=#{directoryId}")
+    @Select("SELECT * FROM file_directory_link fdl JOIN file f ON fdl.id_file = f.id WHERE fdl.id_directory=#{directoryId}")
     @ResultMap("fileResult")
-    @MapKey("name")
-    Map<String, File> findMapFilesByDirectoryId(long directoryId);
+    @MapKey("md5Sum")
+    Map<byte[], File> findMapFilesByDirectoryId(long directoryId);
 
     @Select({"<script>SELECT * FROM file WHERE name IN <foreach item='emp' collection='fileNamesList' open='(' separator=', ' close=')'>#{emp}</foreach></script>"})
     @MapKey("name")

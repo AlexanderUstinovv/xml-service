@@ -15,7 +15,7 @@ import java.util.Map;
 public class XmlFileService implements FileService {
 
     @Override
-    public Map<String, File> getMapFilesByDirectory(Directory directory) {
+    public Map<byte[], File> getMapFilesByDirectory(Directory directory) {
         return fileMapper.findMapFilesByDirectoryId(directory.getId());
     }
 
