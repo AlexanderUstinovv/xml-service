@@ -15,6 +15,14 @@ public class DirectoryHistory {
         this.id = id;
     }
 
+    public long getDirectoryId() {
+        return directoryId;
+    }
+
+    public void setDirectoryId(long directoryId) {
+        this.directoryId = directoryId;
+    }
+
     public String getMessageLog() {
         return messageLog;
     }
@@ -32,6 +40,7 @@ public class DirectoryHistory {
     }
 
     private long id;
+    private long directoryId;
     private String messageLog;
     private Date date;
 
