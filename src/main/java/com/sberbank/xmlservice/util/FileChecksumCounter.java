@@ -12,7 +12,7 @@ import java.security.NoSuchAlgorithmException;
 public class FileChecksumCounter implements CheckSumCounter {
 
     @Override
-    public byte[] getChecksum(String filePath, String algorithm) throws NoSuchAlgorithmException, IOException {
+    public synchronized byte[] getChecksum(String filePath, String algorithm)throws NoSuchAlgorithmException, IOException {
         var messageDigest = MessageDigest.getInstance(algorithm);
         var inputStream = Files.newInputStream(Paths.get(filePath));
         try(inputStream) {
