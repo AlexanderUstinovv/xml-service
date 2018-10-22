@@ -5,7 +5,9 @@ import com.sberbank.xmlservice.dao.FileMapper;
 import com.sberbank.xmlservice.domain.Directory;
 import com.sberbank.xmlservice.domain.File;
 import com.sberbank.xmlservice.domain.FileDirectoryLink;
+import com.sberbank.xmlservice.integration.FileMessage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -57,15 +59,35 @@ public class XmlFileService implements FileService {
     }
 
     @Override
+    public void sendFile(File file) {
+        var fileMessafe = new FileMessage() {{
+            setFileName(file.getName());
+            setFileContent(file.getContent());
+            setReceiver(receiverName);
+            setSender(senderName);
+            setDate(new Date());
+        }};
+
+        sendFileService.sendFileToQueue(fileMessafe);
+    }
+
+    @Override
     public void updateFile(File file, String message) {
         fileMapper.update(file);
         fileHistoryService.createFileHistory(file, message, new Date());
     }
 
+    @Value("${spring.activemq.sender-name}")
+    private String senderName;
+    @Value("${spring.activemq.receiver-name}")
+    private String receiverName;
+
     @Autowired
     private FileMapper fileMapper;
     @Autowired
     private FileHistoryService fileHistoryService;
+    @Autowired
+    private SendFileService sendFileService;
     @Autowired
     private FileDirectoryLinkMapper fileDirectoryLinkMapper;
 }

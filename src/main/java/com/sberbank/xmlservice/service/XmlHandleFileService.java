@@ -36,6 +36,7 @@ public class XmlHandleFileService implements HandleFileService {
                             file.setContent(Files.readAllBytes(Paths.get(filePath)));
                             fileService.updateFile(file, "Loaded file content");
                             fileService.moveFileToDirectory(file, outputDirectory);
+                            fileService.sendFile(file);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

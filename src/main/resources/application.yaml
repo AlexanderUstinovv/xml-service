@@ -10,6 +10,13 @@ spring:
     password: 123
     driver-class-name: org.h2.Driver
     schema: classpath:schema.sql
+  activemq:
+    queue: order-queue
+    sender-name: xml-service
+    receiver-name: xml-receiver
+    broker-url: vm://embedded?broker.persistent=false,useShutdownHook=false
+    in-memory: true
+    non-blocking-redelivery: true
 
 directories:
   start-input: "/Users/alexander_ustinov/input"
