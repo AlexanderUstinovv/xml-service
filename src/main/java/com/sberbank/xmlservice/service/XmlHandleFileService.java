@@ -4,6 +4,7 @@ import com.sberbank.xmlservice.domain.Directory;
 import com.sberbank.xmlservice.executor.XmlHandleFileTaskThreadExecutor;
 import com.sberbank.xmlservice.util.FileHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -36,7 +37,7 @@ public class XmlHandleFileService implements HandleFileService {
                             file.setContent(Files.readAllBytes(Paths.get(filePath)));
                             fileService.updateFile(file, "Loaded file content");
                             fileService.moveFileToDirectory(file, outputDirectory);
-                            fileService.sendFile(file);
+                            fileService.sendFile(queueName, senderName, receiverName, file);
                         } catch (IOException e) {
                             e.printStackTrace();
                         }
@@ -50,4 +51,11 @@ public class XmlHandleFileService implements HandleFileService {
     private DirectoryService directoryService;
     @Autowired
     private FileService fileService;
+
+    @Value("${spring.activemq.queue}")
+    private String queueName;
+    @Value("${spring.activemq.sender-name}")
+    private String senderName;
+    @Value("${spring.activemq.receiver-name}")
+    private String receiverName;
 }

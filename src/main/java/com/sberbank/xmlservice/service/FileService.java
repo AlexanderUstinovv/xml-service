@@ -12,5 +12,5 @@ public interface FileService {
     File createFile(String name, String checksum, byte[] content, Directory inputDirectory, Directory outputDirectory);
     void updateFile(File file, String message);
     void moveFileToDirectory(File file, Directory directory);
-    void sendFile(File file);
+    void sendFile(String queueName, String senderName, String receiverName, File file);
 }
