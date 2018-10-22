@@ -51,11 +51,11 @@ public class XmlDirectoryService implements DirectoryService {
         return filesInInput;
     }
 
-    @Value("${directories.start-input}")
+    @Value("${spring.directories.start-input}")
     private String startInputDirectoryPath;
-    @Value("${directories.output}")
+    @Value("${spring.directories.output}")
     private String outputDirectoryPath;
-    @Value("${directories.archive}")
+    @Value("${spring.directories.archive}")
     private String archiveDirectoryPath;
 
     @Autowired

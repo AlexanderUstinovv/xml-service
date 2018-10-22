@@ -5,7 +5,7 @@ spring:
       enabled: true
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
-    url: "jdbc:h2:tcp://localhost:8081/mem:xml"
+    url: "url: jdbc:h2:file:~/xml"
     username: user
     password: 123
     driver-class-name: org.h2.Driver
@@ -18,7 +18,7 @@ spring:
     in-memory: true
     non-blocking-redelivery: true
 
-directories:
-  start-input: "/Users/alexander_ustinov/input"
-  output: "/Users/alexander_ustinov/output"
-  archive: "/Users/alexander_ustinov/archive"
+  directories:
+    start-input: /tmp/input
+    output: /tmp/output
+    archive: /tmp/archive
