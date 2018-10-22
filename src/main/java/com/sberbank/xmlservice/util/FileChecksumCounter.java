@@ -1,14 +1,11 @@
 package com.sberbank.xmlservice.util;
 
-import org.springframework.stereotype.Component;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-@Component
 public class FileChecksumCounter implements CheckSumCounter {
 
     @Override
@@ -19,11 +16,11 @@ public class FileChecksumCounter implements CheckSumCounter {
             messageDigest.update(inputStream.readAllBytes());
             var hash = messageDigest.digest();
             var stringBuffer = new StringBuilder();
-            for (int i = 0; i < hash.length; i++) {
-                if ((0xff & hash[i]) < 0x10) {
-                    stringBuffer.append("0").append(Integer.toHexString((0xFF & hash[i])));
+            for (byte aHash : hash) {
+                if ((0xff & aHash) < 0x10) {
+                    stringBuffer.append("0").append(Integer.toHexString((0xFF & aHash)));
                 } else {
-                    stringBuffer.append(Integer.toHexString(0xFF & hash[i]));
+                    stringBuffer.append(Integer.toHexString(0xFF & aHash));
                 }
             }
             return stringBuffer.toString();
