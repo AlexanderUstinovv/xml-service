@@ -14,7 +14,8 @@ public class XmlDirectoryChecker implements DirectoryChecker {
         var directory = new File(directoryPath);
         var pathList = new ArrayList<String>();
         if(directory.isDirectory()) {
-            var filesList = directory.listFiles();
+            var filesList = directory.listFiles(pathname -> pathname.getName().toLowerCase().endsWith(".xml")
+                    || pathname.isDirectory());
             if (filesList != null && filesList.length > 0) {
                 Arrays.stream(filesList).forEach(item -> pathList.add(item.getAbsolutePath()));
             }
