@@ -23,11 +23,11 @@ public class File {
         this.name = name;
     }
 
-    public byte[] getMd5Sum() {
+    public String getMd5Sum() {
         return md5Sum;
     }
 
-    public void setMd5Sum(byte[] md5Sum) {
+    public void setMd5Sum(String md5Sum) {
         this.md5Sum = md5Sum;
     }
 
@@ -49,7 +49,7 @@ public class File {
 
     private long id;
     private String name;
-    private byte[] md5Sum;
+    private String md5Sum;
     private byte[] content;
     private Date date;
 }

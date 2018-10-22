@@ -12,8 +12,8 @@ import java.util.concurrent.*;
 public class XmlHandleFileTaskThreadExecutor implements HandleFileTaskThreadExecutor {
 
     @Override
-    public List<Map<String, String>> copyFiles(String[] filesToCopy, ConcurrentHashMap<byte[], File> filesMap,
-                                               String destination, FileHandler fileHandler) {
+    public List<Map<String, String>> handleFiles(String[] filesToCopy, ConcurrentHashMap<String, File> filesMap,
+                                                 String destination, FileHandler fileHandler) {
         var taskList = new ArrayList<Callable<Map<String, String>>>();
         var checkSumCounter = new FileChecksumCounter();
 

@@ -6,5 +6,5 @@ public interface DirectoryService {
     Directory getInputDirectory();
     Directory getOutputDirectory();
     Directory getArchiveDirectory();
-    String[] getFilesFromInputDirectory();
+    String[] getFilesFromDirectory(Directory directory);
 }

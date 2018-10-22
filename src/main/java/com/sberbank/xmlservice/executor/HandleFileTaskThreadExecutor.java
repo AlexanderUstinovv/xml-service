@@ -8,6 +8,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public interface HandleFileTaskThreadExecutor {
-    List<Map<String, String>> copyFiles(String[] filesToCopy, ConcurrentHashMap<byte[], File> filesMap,
-                                        String destination, FileHandler fileHandler);
+    List<Map<String, String>> handleFiles(String[] filesToCopy, ConcurrentHashMap<String, File> filesMap,
+                                          String destination, FileHandler fileHandler);
 }

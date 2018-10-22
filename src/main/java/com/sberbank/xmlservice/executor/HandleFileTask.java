@@ -6,14 +6,13 @@ import com.sberbank.xmlservice.util.FileHandler;
 
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class HandleFileTask implements Callable<Map<String, String>> {
 
-    HandleFileTask(String sourcePath, ConcurrentHashMap<byte[], File> fileMap, String destinationPath, FileHandler fileHandler, CheckSumCounter checkSumCounter) {
+    HandleFileTask(String sourcePath, ConcurrentHashMap<String, File> fileMap, String destinationPath, FileHandler fileHandler, CheckSumCounter checkSumCounter) {
         this.sourcePath = sourcePath;
         this.fileMap = fileMap;
         this.destinationPath = destinationPath;
@@ -24,7 +23,7 @@ public class HandleFileTask implements Callable<Map<String, String>> {
     @Override
     public Map<String, String> call() {
         var isCopied = false;
-        byte[] currentChecksum = new byte[]{0};
+        String currentChecksum = "";
         try {
             currentChecksum = checkSumCounter.getChecksum(sourcePath, "MD5");
             if (!fileMap.containsKey(currentChecksum)) {
@@ -36,12 +35,12 @@ public class HandleFileTask implements Callable<Map<String, String>> {
 
         return Map.of("file", fileHandler.resolveHandledFileName(
                 sourcePath, destinationPath), "result", String.valueOf(isCopied),
-                "checksum", Arrays.toString(currentChecksum));
+                "checksum", currentChecksum);
     }
 
     private String sourcePath;
     private String destinationPath;
     private FileHandler fileHandler;
     private CheckSumCounter checkSumCounter;
-    private ConcurrentHashMap<byte[], File> fileMap;
+    private ConcurrentHashMap<String, File> fileMap;
 }

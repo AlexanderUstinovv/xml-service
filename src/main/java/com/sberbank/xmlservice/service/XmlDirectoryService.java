@@ -35,7 +35,7 @@ public class XmlDirectoryService implements DirectoryService {
 
     @Override
     public Directory getArchiveDirectory() {
-        var archiveDirectory = directoryMapper.findOutputDirectory();
+        var archiveDirectory = directoryMapper.findArchiveDirectory();
         if (archiveDirectory == null || archiveDirectory.getPath().isEmpty()) {
             archiveDirectory = new Directory() {{setPath(archiveDirectoryPath);setInput(false);setOutput(false);setArchive(true);}};
             directoryMapper.save(archiveDirectory);
@@ -44,10 +44,9 @@ public class XmlDirectoryService implements DirectoryService {
     }
 
     @Override
-    public String[] getFilesFromInputDirectory() {
-        var inputDirectory = getInputDirectory();
-        var filesInInput = directoryChecker.getFiles(inputDirectory.getPath());
-        directoryHistoryService.createDirectoryHistory(inputDirectory,
+    public String[] getFilesFromDirectory(Directory directory) {
+        var filesInInput = directoryChecker.getFiles(directory.getPath());
+        directoryHistoryService.createDirectoryHistory(directory,
                 "Found files: " + filesInInput.length, new Date());
         return filesInInput;
     }
@@ -56,7 +55,7 @@ public class XmlDirectoryService implements DirectoryService {
     private String startInputDirectoryPath;
     @Value("${directories.output}")
     private String outputDirectoryPath;
-    @Value("$directories.archive")
+    @Value("${directories.archive}")
     private String archiveDirectoryPath;
 
     @Autowired

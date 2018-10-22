@@ -27,7 +27,7 @@ public interface FileMapper {
     @ResultMap("fileResult")
     File findByNameAndDirectoryId(String name, long directoryId);
 
-    @Select("SELECT * FROM file WHERE md5_sum=#{md5Sum}")
+    @Select("SELECT * FROM file WHERE md5_sum=#{array}")
     @ResultMap("fileResult")
     File findByMd5Sum(String md5Sum);
 
@@ -38,11 +38,11 @@ public interface FileMapper {
     @Select("SELECT * FROM file_directory_link fdl JOIN file f ON fdl.id_file = f.id WHERE fdl.id_directory=#{directoryId}")
     @ResultMap("fileResult")
     @MapKey("md5Sum")
-    Map<byte[], File> findMapFilesByDirectoryId(long directoryId);
+    Map<String, File> findMapFilesByDirectoryId(long directoryId);
 
     @Select({"<script>SELECT * FROM file WHERE name IN <foreach item='emp' collection='fileNamesList' open='(' separator=', ' close=')'>#{emp}</foreach></script>"})
     @MapKey("name")
-    Map<String, byte[]> findFilesByNamesList(@Param("fileNamesList") String[] fileNamesList);
+    Map<String, String> findFilesByNamesList(@Param("fileNamesList") String[] fileNamesList);
 
     @Insert("INSERT INTO file(name, md5_sum, content, date) VALUES(#{name}, #{md5Sum}, #{content}, #{date})")
     @SelectKey(statement="SELECT LAST_INSERT_ID()", keyProperty="id", before=false, resultType=int.class)

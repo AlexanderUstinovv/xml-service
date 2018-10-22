@@ -15,7 +15,9 @@ public interface DirectoryMapper {
             value = {
                     @Result(property = "id", column = "id"),
                     @Result(property = "path", column = "path"),
-                    @Result(property = "isInput", column = "is_input")
+                    @Result(property = "isInput", column = "is_input"),
+                    @Result(property = "isOutput", column = "is_output"),
+                    @Result(property = "isArchive", column = "is_archive")
             }
     )
     Directory findInputDirectory();

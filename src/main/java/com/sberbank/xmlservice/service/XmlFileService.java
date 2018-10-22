@@ -15,7 +15,7 @@ import java.util.Map;
 public class XmlFileService implements FileService {
 
     @Override
-    public Map<byte[], File> getMapFilesByDirectory(Directory directory) {
+    public Map<String, File> getMapFilesByDirectory(Directory directory) {
         return fileMapper.findMapFilesByDirectoryId(directory.getId());
     }
 
@@ -25,7 +25,12 @@ public class XmlFileService implements FileService {
     }
 
     @Override
-    public File createFile(String name, byte[] checksum, byte[] content, Directory inputDirectory, Directory outputDirectory) {
+    public File getFileByCheckSum(String checkSum) {
+        return fileMapper.findByMd5Sum(checkSum);
+    }
+
+    @Override
+    public File createFile(String name, String checksum, byte[] content, Directory inputDirectory, Directory outputDirectory) {
         var file = new File() {{setName(name); setMd5Sum(checksum); setDate(new Date());}};
         fileMapper.save(file);
         var fileDirectoryLink = new FileDirectoryLink() {{
@@ -40,10 +45,21 @@ public class XmlFileService implements FileService {
         return file;
     }
 
+    public void moveFileToDirectory(File file, Directory directory) {
+        var fileDirectoryLink = fileDirectoryLinkMapper.findByFileId(file.getId());
+        fileDirectoryLink.setDirectoryId(directory.getId());
+        fileDirectoryLinkMapper.update(fileDirectoryLink);
+        fileHistoryService.createFileHistory(
+                file,
+                String.format("File moved to %s", directory.getPath()),
+                new Date()
+        );
+    }
+
     @Override
-    public void updateFile(File file) {
+    public void updateFile(File file, String message) {
         fileMapper.update(file);
-        fileHistoryService.createFileHistory(file, "File changed", new Date());
+        fileHistoryService.createFileHistory(file, message, new Date());
     }
 
     @Autowired

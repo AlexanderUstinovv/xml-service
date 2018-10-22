@@ -12,12 +12,21 @@ import java.security.NoSuchAlgorithmException;
 public class FileChecksumCounter implements CheckSumCounter {
 
     @Override
-    public synchronized byte[] getChecksum(String filePath, String algorithm)throws NoSuchAlgorithmException, IOException {
+    public synchronized String getChecksum(String filePath, String algorithm) throws NoSuchAlgorithmException, IOException {
         var messageDigest = MessageDigest.getInstance(algorithm);
         var inputStream = Files.newInputStream(Paths.get(filePath));
-        try(inputStream) {
+        try (inputStream) {
             messageDigest.update(inputStream.readAllBytes());
-            return messageDigest.digest();
+            var hash = messageDigest.digest();
+            var stringBuffer = new StringBuilder();
+            for (int i = 0; i < hash.length; i++) {
+                if ((0xff & hash[i]) < 0x10) {
+                    stringBuffer.append("0").append(Integer.toHexString((0xFF & hash[i])));
+                } else {
+                    stringBuffer.append(Integer.toHexString(0xFF & hash[i]));
+                }
+            }
+            return stringBuffer.toString();
         }
     }
 }
